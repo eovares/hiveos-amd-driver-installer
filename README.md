@@ -11,7 +11,7 @@ git clone https://github.com/eovares/hiveos-amd-driver-installer.git
 ```
 cd /home/user
 
-wget 
+wget https://raw.githubusercontent.com/eovares/hiveos-amd-driver-installer/main/amd-installer.sh
 
 chmod +x ./amd-installer.sh
 
