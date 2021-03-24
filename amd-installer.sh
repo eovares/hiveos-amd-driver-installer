@@ -1,47 +1,47 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # variables
 USER_FOLDER='/home/user'
 DRIVER_FOLDER='/home/user/amd-drivers'
 
-update_hiveos() {
+function update_hiveos() {
     echo "Updating HiveOS"
     apt-get update -y && apt-get upgrade -y
 }
 
-remove_folder() {
+function remove_folder() {
     echo "Removing drivers folder"
     rm -Rf $DRIVER_FOLDER
 }
 
-create_folder() {
+function create_folder() {
     echo "Creating drivers folder"
     mkdir $DRIVER_FOLDER
 }
 
-uninstall_drivers() {
+function uninstall_drivers() {
     echo "Uninstalling drivers"
     # Use this for All-Open components
-    amdgpu-uninstall
+    amdgpu-uninstall -y
     
     # Use this for Pro components
-    amdgpu-pro-uninstall
+    amdgpu-pro-uninstall -y
     
     apt-get remove vulkan-amdgpu-pro*
 }
 
-install_dependencies() {
+function install_dependencies() {
     echo "Installing dependencies"
     apt-get install wget -y
 }
 
-stop_services() {
+function stop_services() {
     echo "Stoppig services"
     systemctl stop hivex
     miner stop
 }
 
-download_drivers() {
+function download_drivers() {
     echo "Downloading drivers"
     
     cd $DRIVER_FOLDER
@@ -49,7 +49,7 @@ download_drivers() {
     wget –c --referer=http://support.amd.com/ https://drivers.amd.com/drivers/linux/amdgpu-pro-20.50-1234663-ubuntu-18.04.tar.xz
 }
 
-extract_drivers () {
+function extract_drivers () {
     echo "Extracting drivers"
     
     tar -Jxvf amdgpu-pro-20.50-1234663-ubuntu-18.04.tar.xz
@@ -57,7 +57,7 @@ extract_drivers () {
     cd amdgpu-pro-20.50-1234663-ubuntu-18.04
 }
 
-grant_permissions() {
+function grant_permissions() {
     echo "Setting permissions"
     chmod +x amdgpu-install
     
@@ -66,7 +66,7 @@ grant_permissions() {
     chmod +x *.deb
 }
 
-install_drivers() {
+function install_drivers() {
     echo "Installing drivers"
     
     apt-get -f install
@@ -78,7 +78,7 @@ install_drivers() {
     dpkg -l amdgpu-pro
 }
 
-setup() {
+function setup() {
     stop_services
     uninstall_drivers
     remove_folder
@@ -87,8 +87,9 @@ setup() {
     install_dependencies
 }
 
-main () {
-    sudo -s
+function main () {
+    echo "HIVEOS AMD drivers"
+    #sudo -s
     setup
     download_drivers
     extract_drivers
